@@ -1,0 +1,17 @@
+
+{
+  "name": "notes-management-system-plus",
+  "version": "2.0.0",
+  "description": "A Notes Management System with Express, MongoDB, Analytics and Personal Gallery",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "multer": "^2.0.2"
+  }
+}

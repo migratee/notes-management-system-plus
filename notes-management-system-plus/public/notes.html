@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoteNest | Smart Digital Notebook</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <a class="brand" href="/">
+        <span class="brand-mark">N</span>
+        <span>NoteNest<small>SMART DIGITAL NOTEBOOK</small></span>
+      </a>
+
+      <button class="new-note-btn"
+        onclick="document.getElementById('title').focus()">
+        + New Note
+      </button>
+
+      <nav class="sidebar-nav">
+        <p class="nav-heading">WORKSPACE</p>
+        <a href="/notes.html" class="nav-link active">▤ All Notes</a>
+        <a href="#" class="nav-link" id="favouritesLink">★ Favourites</a>
+        <a href="#" class="nav-link" id="archiveToggle">▣ Archive</a>
+        <a href="#" class="nav-link" id="trashLink">▤ Trash</a>
+
+        <p class="nav-heading">ORGANIZE</p>
+        <a href="#" class="nav-link">▧ Categories</a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="connection">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="dbStatus">Checking database...</span>
+        </div>
+        <p>NoteNest © <span id="year"></span></p>
+      </div>
+    </aside>
+
+    <main class="main-area">
+
+      <header class="main-header">
+        <div>
+          <p class="eyebrow">YOUR PERSONAL KNOWLEDGE SPACE</p>
+          <h1>My Notes</h1>
+        </div>
+        <div class="header-right">
+          <span class="user-avatar">N</span>
+        </div>
+      </header>
+
+      <section class="stats-grid">
+        <article class="stat-card">
+          <span class="stat-label">All Notes</span>
+          <strong id="statTotal">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Active Notes</span>
+          <strong id="statActive">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Pinned Notes</span>
+          <strong id="statPinned">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">High Priority</span>
+          <strong id="statHigh">0</strong>
+        </article>
+      </section>
+
+      <section class="editor-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">NOTE EDITOR</p>
+            <h2 id="formHeading">Create a note</h2>
+          </div>
+          <span class="heading-icon">＋</span>
+        </div>
+
+        <form id="noteForm">
+          <input type="hidden" id="noteId">
+
+          <label for="title">Note title *</label>
+          <input id="title" maxlength="100"
+            placeholder="Give your note a title..." required>
+
+          <div class="field-row">
+            <div>
+              <label for="category">Category</label>
+              <select id="category">
+                <option>Class</option>
+                <option>Assignment</option>
+                <option>Personal</option>
+                <option>Revision</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="priority">Priority</label>
+              <select id="priority">
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="content">Note content *</label>
+          <textarea id="content" maxlength="5000"
+            rows="5" placeholder="Write your ideas here..."
+            required></textarea>
+
+          <div class="char-count">
+            <span id="charCount">0</span>/5000 characters
+          </div>
+
+          <div class="form-actions">
+            <button class="btn primary" id="saveButton"
+              type="submit">Save note</button>
+            <button class="btn secondary hidden" id="cancelEdit"
+              type="button">Cancel</button>
+          </div>
+
+          <p id="formMessage" class="message" role="status"></p>
+        </form>
+      </section>
+
+      <section class="notes-section">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">YOUR LIBRARY</p>
+            <h2>Your notes <span id="noteCount" class="count-pill">0</span></h2>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <span>⌕</span>
+            <input id="search" placeholder="Search your notes..."
+              aria-label="Search notes">
+          </div>
+
+          <select id="filterCategory">
+            <option>All</option>
+            <option>Class</option>
+            <option>Assignment</option>
+            <option>Personal</option>
+            <option>Revision</option>
+            <option>Other</option>
+          </select>
+
+          <select id="filterPriority">
+            <option>All</option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </div>
+
+        <div id="notesGrid" class="notes-grid"></div>
+
+        <div id="emptyState" class="empty-state hidden">
+          <div class="empty-icon">▤</div>
+          <h3>No notes found</h3>
+          <p>Create your first note or change your search filters.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

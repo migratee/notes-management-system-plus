@@ -1,0 +1,57 @@
+[
+    {
+        "_id": "NOTE001",
+        "title": "Introduction to Database Systems",
+        "content": "Database systems are used to store, organize, retrieve, and manage information.",
+        "category": "Class",
+        "priority": "High",
+        "pinned": true,
+        "archived": false,
+        "createdAt": "2026-10-14T09:00:00.000Z",
+        "updatedAt": "2026-10-14T09:00:00.000Z"
+    },
+    {
+        "_id": "NOTE002",
+        "title": "Web Development Assignment",
+        "content": "Complete the HTML, CSS, and JavaScript assignment.",
+        "category": "Assignment",
+        "priority": "High",
+        "pinned": true,
+        "archived": false,
+        "createdAt": "2026-10-15T10:00:00.000Z",
+        "updatedAt": "2026-10-15T10:00:00.000Z"
+    },
+    {
+        "_id": "NOTE003",
+        "title": "Personal Study Plan",
+        "content": "Organize study time and prepare for upcoming examinations.",
+        "category": "Personal",
+        "priority": "Medium",
+        "pinned": false,
+        "archived": false,
+        "createdAt": "2026-10-16T08:30:00.000Z",
+        "updatedAt": "2026-10-16T08:30:00.000Z"
+    },
+    {
+        "_id": "NOTE004",
+        "title": "Java OOP Revision",
+        "content": "Review classes, objects, inheritance, encapsulation, and polymorphism.",
+        "category": "Revision",
+        "priority": "High",
+        "pinned": false,
+        "archived": false,
+        "createdAt": "2026-10-17T11:00:00.000Z",
+        "updatedAt": "2026-10-17T11:00:00.000Z"
+    },
+    {
+        "_id": "NOTE005",
+        "title": "Computer Networks",
+        "content": "Review network topologies, IP addressing, and network devices.",
+        "category": "Class",
+        "priority": "Low",
+        "pinned": false,
+        "archived": true,
+        "createdAt": "2026-10-18T12:00:00.000Z",
+        "updatedAt": "2026-10-18T12:00:00.000Z"
+    }
+]

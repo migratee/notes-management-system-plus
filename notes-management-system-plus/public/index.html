@@ -1,0 +1,531 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteNest | Notes Management System</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #263247;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        aside {
+            width: 235px;
+            background: #17243a;
+            color: white;
+            padding: 28px 18px;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        aside nav a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 13px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
+
+        aside nav a:hover,
+        aside nav a.active {
+            background: #304766;
+            color: white;
+        }
+
+        main {
+            flex: 1;
+            padding: 30px;
+            min-width: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 27px;
+        }
+
+        .subtitle {
+            color: #788397;
+            margin-top: 7px;
+        }
+
+        .status {
+            background: #e1f7e9;
+            color: #187a3c;
+            padding: 10px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card,
+        .panel {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.04);
+        }
+
+        .stat-card p {
+            color: #788397;
+            margin-bottom: 12px;
+        }
+
+        .stat-card h2 {
+            font-size: 30px;
+        }
+
+        section {
+            margin-bottom: 30px;
+            scroll-margin-top: 20px;
+        }
+
+        .section-heading {
+            margin-bottom: 18px;
+        }
+
+        .section-heading p {
+            color: #788397;
+            margin-top: 6px;
+        }
+
+        .analytics-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .chart-panel {
+            min-height: 330px;
+        }
+
+        .chart-panel h3 {
+            margin-bottom: 20px;
+        }
+
+        .chart-wrap {
+            height: 250px;
+            position: relative;
+        }
+
+        .message {
+            color: #64748b;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .notes-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .note {
+            background: white;
+            padding: 17px;
+            border-radius: 10px;
+            border-left: 4px solid #647eea;
+        }
+
+        .note p {
+            color: #788397;
+            margin-top: 7px;
+            font-size: 14px;
+        }
+
+        .empty {
+            color: #788397;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        @media(max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            aside {
+                width: 100%;
+            }
+
+            aside nav {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 5px;
+            }
+
+            main {
+                padding: 18px;
+            }
+
+            header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .stats,
+            .analytics-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <aside>
+        <div class="logo">NoteNest.</div>
+
+        <nav>
+            <a href="#dashboard" class="active">Dashboard</a>
+            <a href="notes.html">My Notes</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#recent-notes">Recent Notes</a>
+        </nav>
+    </aside>
+
+    <main>
+
+        <header>
+            <div>
+                <h1>Welcome to NoteNest</h1>
+                <p class="subtitle">Your personal notes management dashboard</p>
+            </div>
+
+            <div class="status" id="connectionStatus">
+                Checking database...
+            </div>
+        </header>
+
+        <section id="dashboard">
+            <div class="section-heading">
+                <h2>Dashboard Overview</h2>
+                <p>Summary of your notes</p>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <p>Total Notes</p>
+                    <h2 id="totalNotes">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Active Notes</p>
+                    <h2 id="activeNotes">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Archived Notes</p>
+                    <h2 id="archivedNotes">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>High Priority</p>
+                    <h2 id="highNotes">0</h2>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics">
+            <div class="section-heading">
+                <h2>Analytics</h2>
+                <p>Understand your notes through visual reports.</p>
+            </div>
+
+            <div class="analytics-summary">
+                <div class="stat-card">
+                    <p>Total Notes</p>
+                    <h2 id="analyticsTotal">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Active Notes</p>
+                    <h2 id="analyticsActive">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Archived Notes</p>
+                    <h2 id="analyticsArchived">0</h2>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+
+                <div class="panel chart-panel">
+                    <h3>Notes by Category</h3>
+                    <div class="chart-wrap">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel chart-panel">
+                    <h3>Notes by Priority</h3>
+                    <div class="chart-wrap">
+                        <canvas id="priorityChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel chart-panel">
+                    <h3>Active vs Archived</h3>
+                    <div class="chart-wrap">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <p class="message" id="analyticsMessage">
+                Loading analytics...
+            </p>
+        </section>
+
+        <section id="recent-notes">
+            <div class="section-heading">
+                <h2>Recent Notes</h2>
+                <p>Your latest active notes</p>
+            </div>
+
+            <div class="notes-list" id="recentNotes">
+                <div class="empty">Loading notes...</div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script>
+    let noteCharts = {};
+
+    async function loadAnalytics() {
+        const message = document.getElementById("analyticsMessage");
+
+        try {
+            const response = await fetch("/api/analytics");
+
+            if (!response.ok) {
+                throw new Error("Analytics API returned " + response.status);
+            }
+
+            const data = await response.json();
+
+            document.getElementById("analyticsTotal").textContent =
+                data.total ?? 0;
+
+            document.getElementById("analyticsActive").textContent =
+                data.active ?? 0;
+
+            document.getElementById("analyticsArchived").textContent =
+                data.archived ?? 0;
+
+            document.getElementById("totalNotes").textContent =
+                data.total ?? 0;
+
+            document.getElementById("activeNotes").textContent =
+                data.active ?? 0;
+
+            document.getElementById("archivedNotes").textContent =
+                data.archived ?? 0;
+
+            const categoryLabels = (data.byCategory || []).map(
+                item => item._id || "Uncategorized"
+            );
+
+            const categoryValues = (data.byCategory || []).map(
+                item => item.count
+            );
+
+            const priorityLabels = (data.byPriority || []).map(
+                item => item._id || "Unspecified"
+            );
+
+            const priorityValues = (data.byPriority || []).map(
+                item => item.count
+            );
+
+            renderChart("categoryChart", "doughnut",
+                categoryLabels, categoryValues);
+
+            renderChart("priorityChart", "bar",
+                priorityLabels, priorityValues);
+
+            renderChart("statusChart", "doughnut",
+                ["Active", "Archived"],
+                [data.active || 0, data.archived || 0]);
+
+            message.textContent =
+                "Analytics successfully loaded from MongoDB.";
+
+        } catch (error) {
+            console.error("Analytics error:", error);
+            message.textContent =
+                "Could not load analytics: " + error.message;
+        }
+    }
+
+    function renderChart(id, type, labels, values) {
+        const canvas = document.getElementById(id);
+
+        if (noteCharts[id]) {
+            noteCharts[id].destroy();
+        }
+
+        noteCharts[id] = new Chart(canvas, {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Number of notes",
+                    data: values,
+                    backgroundColor: [
+                        "#647eea",
+                        "#43b89c",
+                        "#f4b942",
+                        "#e87979",
+                        "#9274d8"
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "bottom"
+                    }
+                },
+                scales: type === "bar" ? {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                } : {}
+            }
+        });
+    }
+
+    async function loadDashboard() {
+        try {
+            const healthResponse = await fetch("/api/health");
+
+            if (healthResponse.ok) {
+                document.getElementById("connectionStatus").textContent =
+                    "Database connected";
+            } else {
+                throw new Error("Database health check failed");
+            }
+        } catch (error) {
+            document.getElementById("connectionStatus").textContent =
+                "Connection unavailable";
+        }
+
+        try {
+            const response = await fetch("/api/notes?archived=false");
+
+            if (!response.ok) {
+                throw new Error("Could not retrieve notes");
+            }
+
+            const notes = await response.json();
+
+            const container = document.getElementById("recentNotes");
+            container.innerHTML = "";
+
+            if (!Array.isArray(notes) || notes.length === 0) {
+                container.innerHTML =
+                    '<div class="empty">No active notes found.</div>';
+                return;
+            }
+
+            const highPriority = notes.filter(
+                note => note.priority === "High"
+            ).length;
+
+            document.getElementById("highNotes").textContent =
+                highPriority;
+
+            notes.slice(0, 5).forEach(note => {
+                const item = document.createElement("div");
+                item.className = "note";
+
+                const title = document.createElement("strong");
+                title.textContent = note.title || "Untitled note";
+
+                const content = document.createElement("p");
+                content.textContent = note.content || "No content";
+
+                item.appendChild(title);
+                item.appendChild(content);
+
+                container.appendChild(item);
+            });
+
+        } catch (error) {
+            console.error("Dashboard error:", error);
+
+            document.getElementById("recentNotes").innerHTML =
+                '<div class="empty">Unable to load notes.</div>';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadDashboard();
+        loadAnalytics();
+    });
+</script>
+
+</body>
+</html>
